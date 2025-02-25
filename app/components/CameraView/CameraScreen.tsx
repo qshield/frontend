@@ -6,14 +6,15 @@ import {
   BarcodeScanningResult,
 } from "expo-camera";
 import { useScanStore } from "@/app/store/scanStore";
+import axios from "axios";
 
 export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const [cameraReady, setCameraReady] = useState(false);
 
+  const urlCode = useScanStore((state) => state.urlCode);
   const scanned = useScanStore((state) => state.scanned);
   const setScanned = useScanStore((state) => state.setScanned);
-
   const setUrlCode = useScanStore((state) => state.setUrlCode);
   const setAnalyzing = useScanStore((s) => s.setAnalyzing);
 
@@ -26,7 +27,7 @@ export default function CameraScreen() {
   }, [permission]);
 
   const handleOpenSettings = () => {
-    Linking.openSettings(); // 앱의 설정 페이지로 이동
+    Linking.openSettings(); // 앱의 설정 페이지로 이동하기
   };
 
   if (!permission) return <View />;
@@ -44,14 +45,15 @@ export default function CameraScreen() {
 
   const handleBarCodeScanned = ({ data }: BarcodeScanningResult) => {
     // 스캔 돼었을때
-
     if (scanned) return; // 중복 스캔 방지
     setScanned(true);
     setUrlCode(data);
   };
 
-  const analysisHandle = () => {
-    // axios 분석하기 버튼
+  const analysisHandle = async () => {
+    await axios.post("http://localhost:8080", { url: urlCode }).then((res) => {
+      console.log(res);
+    });
     setAnalyzing(true);
     setTimeout(() => {
       setScanned(false); // 다시 스캔 가능하도록 초기화

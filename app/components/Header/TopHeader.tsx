@@ -6,7 +6,7 @@ export default function TopHeader() {
   const [permission, requestPermission] = useCameraPermissions();
 
   const CameraReq = () => {
-    requestPermission();
+    requestPermission(); // 사용자가 허용안하면 안먹힘
   };
 
   return (
