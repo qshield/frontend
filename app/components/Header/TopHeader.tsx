@@ -12,7 +12,6 @@ export default function TopHeader() {
   return (
     <View
       style={{
-        backgroundColor: "blue",
         width: "95%",
         height: "15%",
         flex: 1,

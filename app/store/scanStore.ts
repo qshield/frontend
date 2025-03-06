@@ -7,6 +7,8 @@ interface ScanState {
   setUrlCode: (value: string) => void; // URL 설정
   analyzing: boolean; // 분석중
   setAnalyzing: (value: boolean) => void; // 분석중
+  result: number;
+  setResult: (Value: number) => void;
 }
 
 export const useScanStore = create<ScanState>((set) => ({
@@ -16,4 +18,6 @@ export const useScanStore = create<ScanState>((set) => ({
   setUrlCode: (value: string) => set({ urlCode: value }),
   analyzing: false,
   setAnalyzing: (value: boolean) => set({ analyzing: value }),
+  result: 0,
+  setResult: (value: number) => set({ result: value }),
 }));

@@ -7,6 +7,7 @@ import {
 } from "expo-camera";
 import { useScanStore } from "@/app/store/scanStore";
 import axios from "axios";
+import { scanUrl } from "@/app/api";
 
 export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -17,6 +18,8 @@ export default function CameraScreen() {
   const setScanned = useScanStore((state) => state.setScanned);
   const setUrlCode = useScanStore((state) => state.setUrlCode);
   const setAnalyzing = useScanStore((s) => s.setAnalyzing);
+  const result = useScanStore((s) => s.result);
+  const setResult = useScanStore((s) => s.setResult);
 
   useEffect(() => {
     console.log("Camera Permission: ", permission);
@@ -51,12 +54,12 @@ export default function CameraScreen() {
   };
 
   const analysisHandle = async () => {
-    await axios.post("http://localhost:8080", { url: urlCode }).then((res) => {
-      console.log(res);
-    });
     setAnalyzing(true);
+    const resultCode = await scanUrl(urlCode);
+    setResult(resultCode);
+    // setResult(0);
     setTimeout(() => {
-      setScanned(false); // 다시 스캔 가능하도록 초기화
+      setScanned(false);
     }, 3000);
   };
 
